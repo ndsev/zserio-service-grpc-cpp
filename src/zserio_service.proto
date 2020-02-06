@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package zserio_service_grpc;
+
+/* Generic request. */
+message Request
+{
+    string methodName = 1;  // name of the method to be called on a zserio service
+    bytes requestData = 2;  // request data (sequence of bytes)
+}
+
+/* Generic response. */
+message Response
+{
+    bytes responseData = 1; // response data (sequence of bytes)
+}
+
+/* Generic gRPC service. */
+service ZserioService
+{
+    rpc callMethod(Request) returns (Response) {} // generic service method
+}
