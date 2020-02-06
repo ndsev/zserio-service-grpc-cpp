@@ -11,8 +11,8 @@ if(MSVC)
     add_definitions(-D_WIN32_WINNT=0x600)
 endif()
 
-find_package(Protobuf REQUIRED)
-find_package(gRPC REQUIRED)
+find_package(Protobuf CONFIG REQUIRED)
+find_package(gRPC CONFIG REQUIRED)
 
 # generate ZserioService using protobuf
 set(PROTOC_EXECUTABLE $<TARGET_FILE:protobuf::protoc>)
