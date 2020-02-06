@@ -68,7 +68,7 @@ and `-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON` to ensure that binaries find their 
 
 ### Hints
 
-#### find_package(Protobuf)
+#### FindProtobuf.cmake
 
 Current gRPC CMake configuration uses `find_packge(protobuf ...)`, but it uses MODULE mode by default. Then it
 expects legacy variable names like `Protobuf_INCLUDE_DIR`, `Protobuf_LIBRARY`, `Protobuf_PROTOC_LIBRARY` and

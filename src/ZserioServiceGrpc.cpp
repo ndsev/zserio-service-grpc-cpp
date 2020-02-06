@@ -10,9 +10,9 @@ namespace zserio_service_grpc
     {
         const std::string& requestData = request->requestdata();
         std::vector<uint8_t> responseData;
-        
+
         m_service.callMethod(request->methodname(), {requestData.begin(), requestData.end()}, responseData);
-        
+
         response->set_responsedata({responseData.begin(), responseData.end()});
         return grpc::Status::OK;
     }
@@ -44,10 +44,10 @@ namespace zserio_service_grpc
         Request request;
         request.set_methodname(methodName);
         request.set_requestdata({requestData.begin(), requestData.end()});
-        
+
         Response response;
         grpc::Status status = m_stub->callMethod(context, request, &response);
-        
+
         if (status.ok())
         {
             const std::string& grpcResponseData = response.responsedata();

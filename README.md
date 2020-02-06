@@ -1,4 +1,4 @@
-# Zserio GRPC Service
+# ZserioServiceGrpc library
 
 Sample implementation of Zserio service gRPC backend in __C++__.
 
@@ -32,3 +32,7 @@ cmake -DCMAKE_PREFIX_PATH="/opt/tools/protobuf/lib/cmake;/opt/tools/gRPC/lib/cma
 make
 popd
 ```
+
+## Usage
+
+See [Calculator Example](./examples/calculator/README.md).
