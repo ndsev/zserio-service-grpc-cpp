@@ -14,7 +14,7 @@ CMake's `find_package(gRPC)` will not be available.
 
 ## Building
 
-> Note that the following instruction suppose that gRPC was installed according to
+> Note that the following instructions suppose that gRPC was installed according to
 [doc/BUILD_gRPC.md](doc/BUILD_gRPC.md) and therefor it uses `-DCMAKE_PREFIX_PATH` to set correct path to gRPC
 and its dependencies.
 
