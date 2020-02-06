@@ -1,10 +1,10 @@
-# Buliding gRPC
+# Building gRPC
 
-First listed prereuqisities listed in official instaructions: https://grpc.io/docs/quickstart/cpp/.
+First install pre-requisites listed in official instructions: https://github.com/grpc/grpc/blob/master/BUILDING.md.
 
 And clone the repository with all submodules:
 ```bash
-git clone -b $(curl -sL https://grpc.io/release) https://github.com/grpc/grpc --recurse-submodules
+git clone -b v1.26.0 https://github.com/grpc/grpc --recurse-submodules
 cd grpc
 ```
 
@@ -14,7 +14,7 @@ The following steps are inspired by gRPC's CMake distribution test:
 https://github.com/grpc/grpc/blob/master/test/distrib/cpp/run_distrib_test_cmake.sh.
 
 > Note that we use `-DCMAKE_INSTALL_PREFIX=/opt/tools/${TOOL_NAME}` to make it easier to uninstall gRPC and its
-dependencies. Then we have to use `-DCMAKE_PREFIX_PATH` properly to find the tools by CMake.
+dependencies. Then, we have to use `-DCMAKE_PREFIX_PATH` properly to find the tools by CMake.
 
 > Note that you should use `-DBUILD_SHARED_LIBS=ON` only if you need to build shared libraries.
 
@@ -23,7 +23,7 @@ Install OpenSSL and Zlib from Ubuntu repositories:
 sudo apt install libssl-dev libz-dev
 ```
 
-Build and install c-ares which comes as a sumboldule with gRPC:
+Build and install c-ares which comes as a submodule with gRPC:
 ```bash
 mkdir -p third_party/cares/cares/cmake/build
 pushd third_party/cares/cares/cmake/build
@@ -59,14 +59,14 @@ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/opt/tools/gRPC -DBUILD_
       -DProtobuf_PROTOC_EXECUTABLE=/opt/tools/protobuf/bin/protoc \
       ../..
 make
-sudo make intall
+sudo make install
 popd
 ```
 
 > Since we install gRPC to custom location, we have to use `-DCMAKE_INSTALL_RPATH=${CMAKE_INSTALL_PREFIX}/lib`
 and `-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON` to ensure that binaries find their dependencies.
 
-### ISSUES
+### Hints
 
 #### find_package(Protobuf)
 

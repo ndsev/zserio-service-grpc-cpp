@@ -1,1 +1,8 @@
+# generated build files
 build
+
+# gRPC sources
+grpc
+
+# Eclipse project files
+.project
