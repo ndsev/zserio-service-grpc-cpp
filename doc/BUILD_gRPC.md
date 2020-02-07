@@ -8,7 +8,7 @@ And clone the repository with all submodules:
 git clone -b v1.27.0 https://github.com/grpc/grpc --recurse-submodules
 ```
 
-> Note that the following instruction are valid for gRPC v1.27.0. Different steps may be needed for other
+> Note that the following instructions are valid for gRPC v1.27.0. Different steps may be needed for other
 versions. It is always a good idea to check gRPC distribution tests for CMake mentioned below to see what
 have to be done.
 
@@ -30,6 +30,17 @@ Go to the gRPC root directory.
 Install OpenSSL and Zlib from Ubuntu repositories:
 ```bash
 sudo apt install libssl-dev libz-dev
+```
+
+Build and install abseil which comes as a submodule with gRPC:
+```bash
+mkdir -p third_party/abseil-cpp/cmake/build
+pushd third_party/abseil-cpp/cmake/build
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/opt/tools/abseil \
+      -DCMAKE_POSITION_INDEPENDENT_CODE=TRUE -DBUILD_SHARED_LIBS=ON ../..
+make
+sudo make install
+popd
 ```
 
 Build and install c-ares which comes as a submodule with gRPC:
@@ -77,7 +88,7 @@ popd
 > Since we install gRPC to custom location, we have to use `-DCMAKE_INSTALL_RPATH=${CMAKE_INSTALL_PREFIX}/lib`
 and `-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON` to ensure that binaries find their dependencies.
 
-### Hints
+### Known Problems
 
 #### FindProtobuf.cmake
 
