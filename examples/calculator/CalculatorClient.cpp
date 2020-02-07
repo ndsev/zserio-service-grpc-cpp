@@ -77,7 +77,7 @@ void squareRoot(calculator::Calculator::Client& client, std::string input)
         // protocol specific context can be passed to the client's method call
         grpc::ClientContext context;
         std::chrono::system_clock::time_point deadline =
-                std::chrono::system_clock::now() + std::chrono::milliseconds(100);
+                std::chrono::system_clock::now() + std::chrono::milliseconds(1);
         context.set_deadline(deadline);
         client.squareRootMethod(request, response, &context);
     }

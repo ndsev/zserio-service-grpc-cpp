@@ -28,7 +28,7 @@ namespace zserio_service_grpc
         explicit GrpcService(zserio::IService& service);
 
         /** Implementation of gRPC ZserioService::Service. */
-        grpc::Status callMethod(grpc::ServerContext*, const zserio_service_grpc::Request* request,
+        grpc::Status callMethod(grpc::ServerContext* serverContext, const zserio_service_grpc::Request* request,
                 zserio_service_grpc::Response* response) override;
 
     private:

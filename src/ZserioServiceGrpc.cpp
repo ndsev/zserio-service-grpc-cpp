@@ -6,12 +6,17 @@ namespace zserio_service_grpc
     {
     }
 
-    grpc::Status GrpcService::callMethod(grpc::ServerContext*, const Request* request, Response* response)
+    grpc::Status GrpcService::callMethod(grpc::ServerContext* serverContext, const Request* request,
+            Response* response)
     {
+        if (serverContext->IsCancelled())
+            return grpc::Status(grpc::StatusCode::CANCELLED, "Client cancelled, abandoning.");
+
         const std::string& requestData = request->requestdata();
         std::vector<uint8_t> responseData;
 
-        m_service.callMethod(request->methodname(), {requestData.begin(), requestData.end()}, responseData);
+        m_service.callMethod(request->methodname(), {requestData.begin(), requestData.end()}, responseData,
+                serverContext);
 
         response->set_responsedata({responseData.begin(), responseData.end()});
         return grpc::Status::OK;
