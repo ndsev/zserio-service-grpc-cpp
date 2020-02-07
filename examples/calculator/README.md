@@ -1,22 +1,23 @@
 # Calculator example
 
-This example demonstrates how to use __ZserioServiceGrpc library__ to use gRPC server-client communication.
+This example demonstrates how to use **ZserioServiceGrpc library** to use gRPC server-client communication.
 
-## Pre-requisities
+## Prerequisites
 
-1. Pre-requisities for [ZserioServiceGrpc](../../README.md#prerequisities),
+1. Prerequisites for [ZserioServiceGrpc](../../README.md#prerequisites),
 2. Zserio C++ runtime library,
-3. Zseiro compiler (`zserio.jar`).
+3. Zserio compiler (`zserio.jar`).
 
-> Zserio prerequisities are included in this repo in 3rdparty folder.
+> Zserio prerequisites are included in this repo in 3rdparty folder.
 
 ## Building
 
 ```bash
 mkdir build
 pushd build
-cmake -DCMAKE_PREFIX_PATH="/opt/tools/protobuf/lib/cmake;/opt/tools/gRPC/lib/cmake;/opt/tools/cares/lib/cmake" \
-      ..
+PREFIX_PATH="/opt/tools/gRPC/lib/cmake;/opt/tools/protobuf/lib/cmake"
+PREFIX_PATH+=";/opt/tools/cares/lib/cmake;/opt/tools/abseil/lib/cmake"
+cmake -DCMAKE_PREFIX_PATH="${PREFIX_PATH}" ..
 make
 popd
 ```
