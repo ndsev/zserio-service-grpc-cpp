@@ -7,6 +7,7 @@
 #include "ZserioServiceGrpc.h"
 #include "calculator/Calculator.h"
 
+/** Implementation of Zserio Calculator Service. */
 class CalculatorService : public calculator::Calculator::Service
 {
 public:
@@ -40,7 +41,7 @@ int main(int argc, char* argv[])
     if (argc > 1)
         address = argv[1];
 
-    std::cout << "Welcome to Zserio Calculator gRPC Server exmaple!"
+    std::cout << "Welcome to Zserio Calculator gRPC Server example!"
               << "\n"
               << "Starting server (terminate with ^C) ..." << std::flush;
 

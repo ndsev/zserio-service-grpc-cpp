@@ -33,32 +33,35 @@ add_custom_command(
     DEPENDS "${CALCULATOR_ZS}"
 )
 
+# generated source (needed to generate ${CALCULATOR_GEN_SOURCES} only once)
+add_library(CalculatorGen OBJECT ${CALCULATOR_GEN_SOURCES})
+
 # server
-add_executable(${PROJECT_NAME}Server
-    ${PROJECT_NAME}Server.cpp
-    ${CALCULATOR_GEN_SOURCES}
+add_executable(CalculatorServer
+    CalculatorServer.cpp
+    $<TARGET_OBJECTS:CalculatorGen>
 )
 
 # client
-add_executable(${PROJECT_NAME}Client
-    ${PROJECT_NAME}Client.cpp
-    ${CALCULATOR_GEN_SOURCES}
+add_executable(CalculatorClient
+    CalculatorClient.cpp
+    $<TARGET_OBJECTS:CalculatorGen>
 )
 
 # generated sources
-target_include_directories(${PROJECT_NAME}Server PRIVATE "${CMAKE_CURRENT_BINARY_DIR}")
-target_include_directories(${PROJECT_NAME}Client PRIVATE "${CMAKE_CURRENT_BINARY_DIR}")
+target_include_directories(CalculatorGen PRIVATE "${CMAKE_CURRENT_BINARY_DIR}")
+target_include_directories(CalculatorClient PRIVATE "${CMAKE_CURRENT_BINARY_DIR}")
+target_include_directories(CalculatorServer PRIVATE "${CMAKE_CURRENT_BINARY_DIR}")
 
 # add ZserioServiceGrpc library
 add_subdirectory("${REPOSITORY_ROOT}/src" "${CMAKE_CURRENT_BINARY_DIR}/ZserioServiceGrpc")
-target_include_directories(${PROJECT_NAME}Server PRIVATE "${REPOSITORY_ROOT}/src")
-target_include_directories(${PROJECT_NAME}Client PRIVATE "${REPOSITORY_ROOT}/src")
-target_link_libraries(${PROJECT_NAME}Server ZserioServiceGrpc)
-target_link_libraries(${PROJECT_NAME}Client ZserioServiceGrpc)
+target_include_directories(CalculatorServer PRIVATE "${REPOSITORY_ROOT}/src")
+target_include_directories(CalculatorClient PRIVATE "${REPOSITORY_ROOT}/src")
+target_link_libraries(CalculatorServer ZserioServiceGrpc)
+target_link_libraries(CalculatorClient ZserioServiceGrpc)
 
 # add ZserioCppRuntime library
 add_subdirectory("${REPOSITORY_ROOT}/3rdparty/runtime" "${CMAKE_CURRENT_BINARY_DIR}/ZserioCppRuntime")
-target_include_directories(${PROJECT_NAME}Server PRIVATE "${REPOSITORY_ROOT}/3rdparty/runtime")
-target_include_directories(${PROJECT_NAME}Client PRIVATE "${REPOSITORY_ROOT}/3rdparty/runtime")
-target_link_libraries(${PROJECT_NAME}Server ZserioCppRuntime)
-target_link_libraries(${PROJECT_NAME}Client ZserioCppRuntime)
+target_include_directories(CalculatorGen PRIVATE "${REPOSITORY_ROOT}/3rdparty/runtime")
+target_link_libraries(CalculatorServer ZserioCppRuntime)
+target_link_libraries(CalculatorClient ZserioCppRuntime)

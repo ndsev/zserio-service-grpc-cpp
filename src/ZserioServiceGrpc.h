@@ -15,8 +15,7 @@ namespace zserio_service_grpc
     /**
      * Implementation of the gRPC service generated for ZserioService.
      *
-     * GrpcService is inteded to wrap implementation of a particular Zserio service and make it callable
-     * via gRPC.
+     * GrpcService is intended to wrap implementation of a particular Zserio service and make it usable in gRPC.
      */
     class GrpcService : public ZserioService::Service
     {

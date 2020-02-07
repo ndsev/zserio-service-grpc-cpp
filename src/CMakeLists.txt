@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 2.8.12.2)
 
 project(ZserioServiceGrpc)
 
-set(PROJECT_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/.." CACHE PATH "")
-set(ZSERIO_INCLUDE_DIR "${PROJECT_ROOT}/3rdparty/runtime" CACHE PATH "")
+set(REPOSITORY_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/.." CACHE PATH "")
+set(ZSERIO_INCLUDE_DIR "${REPOSITORY_ROOT}/3rdparty/runtime" CACHE PATH "")
 option(BUILD_SHARED_LIBS "Whether to build shared libraries" ON)
 
 if(MSVC)

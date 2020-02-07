@@ -1,6 +1,7 @@
 #include <string.h>
 #include <iostream>
 #include <string>
+#include <chrono>
 
 #include "ZserioServiceGrpc.h"
 #include "calculator/Calculator.h"
@@ -14,11 +15,11 @@ enum class Mode : uint8_t
 void printHelp()
 {
     std::cout << "Help:\n"
-              << "   h            Prints this help.\n"
-              << "   p            Sets powerOfTwo(int32) mode.\n"
-              << "   s            Sets squareRoot(double) mode.\n"
-              << " INPUT          Any valid input for the current mode.\n"
-              << "   q            Quits the client.\n"
+              << " INPUT        Any valid input for the current mode.\n"
+              << " p            Sets powerOfTwo(int32) mode.\n"
+              << " s            Sets squareRoot(double) mode.\n"
+              << " h            Prints this help.\n"
+              << " q            Quits the client.\n"
               << "\n"
               << "Note that the letter before the '>' denotes the current mode." << std::endl;
 }
@@ -73,7 +74,12 @@ void squareRoot(calculator::Calculator::Client& client, std::string input)
     calculator::Double response;
     try
     {
-        client.squareRootMethod(request, response);
+        // protocol specific context can be passed to the client's method call
+        grpc::ClientContext context;
+        std::chrono::system_clock::time_point deadline =
+                std::chrono::system_clock::now() + std::chrono::milliseconds(100);
+        context.set_deadline(deadline);
+        client.squareRootMethod(request, response, &context);
     }
     catch (const zserio::ServiceException& e)
     {
