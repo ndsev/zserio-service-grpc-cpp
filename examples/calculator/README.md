@@ -30,6 +30,6 @@ cd build
 ./CalculatorClient
 # follow client's instructions
 # ...
-# pres q + ENTER to quit client
-fg # and pres Ctrl+C to quit server
+# pres q + ENTER to quit the client
+fg # and pres Ctrl+C to quit the server
 ```
