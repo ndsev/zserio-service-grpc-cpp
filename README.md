@@ -1,6 +1,6 @@
-# ZserioServiceGrpc library
+# Zserio Service gRPC backend
 
-Sample implementation of Zserio service gRPC backend in **C++**.
+Sample implementation of Zserio Service gRPC backend in **C++**.
 
 ## Prerequisites
 
