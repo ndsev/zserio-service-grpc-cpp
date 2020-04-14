@@ -18,7 +18,7 @@ pushd build
 PREFIX_PATH="/opt/tools/gRPC/lib/cmake;/opt/tools/protobuf/lib/cmake"
 PREFIX_PATH+=";/opt/tools/cares/lib/cmake;/opt/tools/abseil/lib/cmake"
 cmake -DCMAKE_PREFIX_PATH="${PREFIX_PATH}" ..
-make
+cmake --build .
 popd
 ```
 
