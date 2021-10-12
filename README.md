@@ -6,11 +6,13 @@ Sample implementation of Zserio Service gRPC backend in **C++**.
 
 Install gRPC and protobuf according to the official instructions: https://grpc.io/docs/quickstart/cpp/.
 
-> Please note that this sample use CMake and therefore it is necessary to install gRPC using CMake, otherwise
+> Note that this sample use CMake and therefore it is necessary to install gRPC using CMake, otherwise
 CMake's `find_package(gRPC)` will not be available.
 
 > Since gRPC official instructions are sometimes inaccurate, you can check our
 [doc/BUILD_gRPC.md](doc/BUILD_gRPC.md).
+
+> Note that Zserio prerequisites are automatically downloaded by CMake.
 
 ## Building
 

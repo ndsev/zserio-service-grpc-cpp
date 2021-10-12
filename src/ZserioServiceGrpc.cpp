@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "ZserioServiceGrpc.h"
 
 namespace zserio_service_grpc
@@ -12,13 +14,12 @@ namespace zserio_service_grpc
         if (serverContext->IsCancelled())
             return grpc::Status(grpc::StatusCode::CANCELLED, "Client cancelled, abandoning.");
 
-        const std::string& requestData = request->requestdata();
-        std::vector<uint8_t> responseData;
+        const std::vector<uint8_t> requestData(request->requestdata().begin(), request->requestdata().end());
+        zserio::BlobBuffer<> responseData;
 
-        m_service.callMethod(request->methodname(), {requestData.begin(), requestData.end()}, responseData,
-                serverContext);
+        m_service.callMethod(request->methodname(), requestData, responseData, serverContext);
 
-        response->set_responsedata({responseData.begin(), responseData.end()});
+        response->set_responsedata({responseData.data().begin(), responseData.data().end()});
         return grpc::Status::OK;
     }
 
@@ -27,8 +28,8 @@ namespace zserio_service_grpc
     {
     }
 
-    void GrpcClient::callMethod(const std::string& methodName, const std::vector<uint8_t>& requestData,
-                std::vector<uint8_t>& responseData, void* context)
+    void GrpcClient::callMethod(zserio::StringView methodName, zserio::Span<const uint8_t> requestData,
+            zserio::IBlobBuffer& responseData, void* context)
     {
         if (context == nullptr)
         {
@@ -42,12 +43,12 @@ namespace zserio_service_grpc
         }
     }
 
-    void GrpcClient::callMethodWithContext(const std::string& methodName,
-            const std::vector<uint8_t>& requestData, std::vector<uint8_t>& responseData,
+    void GrpcClient::callMethodWithContext(zserio::StringView methodName,
+            zserio::Span<const uint8_t> requestData, zserio::IBlobBuffer& responseData,
             grpc::ClientContext* context)
     {
         Request request;
-        request.set_methodname(methodName);
+        request.set_methodname(methodName.data(), methodName.size());
         request.set_requestdata({requestData.begin(), requestData.end()});
 
         Response response;
@@ -56,7 +57,8 @@ namespace zserio_service_grpc
         if (status.ok())
         {
             const std::string& grpcResponseData = response.responsedata();
-            responseData.assign(grpcResponseData.begin(), grpcResponseData.end());
+            responseData.resize(grpcResponseData.length());
+            std::copy(grpcResponseData.begin(), grpcResponseData.end(), responseData.data().begin());
         }
         else
         {

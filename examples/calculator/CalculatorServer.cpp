@@ -11,18 +11,24 @@
 class CalculatorService : public calculator::Calculator::Service
 {
 public:
-    void powerOfTwoImpl(const calculator::I32& request, calculator::U64& response, void*) override
+    calculator::U64 powerOfTwoImpl(const calculator::I32& request, void*) override
     {
+        calculator::U64 response;
         response.setValue(request.getValue() * request.getValue());
         std::cout << "CalculatorServer: powerOfTwoImpl called, request=" << request.getValue()
                   << ", response=" << response.getValue() << std::endl;
+
+        return response;
     }
 
-    void squareRootImpl(const calculator::Double& request, calculator::Double& response, void*) override
+    calculator::Double squareRootImpl(const calculator::Double& request, void*) override
     {
+        calculator::Double response;
         response.setValue(sqrt(request.getValue()));
         std::cout << "CalculatorServer: squareRootImpl called, request=" << request.getValue()
                   << ", response=" << response.getValue() << std::endl;
+
+        return response;
     }
 };
 

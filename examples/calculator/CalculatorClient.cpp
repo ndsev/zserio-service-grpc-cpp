@@ -41,17 +41,15 @@ void powerOfTwo(calculator::Calculator::Client& client, std::string input)
         return;
     }
 
-    calculator::U64 response;
     try
     {
-        client.powerOfTwoMethod(request, response);
+        const calculator::U64 response = client.powerOfTwoMethod(request);
+        std::cout << response.getValue() << std::endl;
     }
     catch (const zserio::ServiceException& e)
     {
         std::cout << e.what() << std::endl;
     }
-
-    std::cout << response.getValue() << std::endl;
 }
 
 void squareRoot(calculator::Calculator::Client& client, std::string input)
@@ -71,22 +69,18 @@ void squareRoot(calculator::Calculator::Client& client, std::string input)
         return;
     }
 
-    calculator::Double response;
     try
     {
         // protocol specific context can be passed to the client's method call
         grpc::ClientContext context;
-        std::chrono::system_clock::time_point deadline =
-                std::chrono::system_clock::now() + std::chrono::milliseconds(1);
-        context.set_deadline(deadline);
-        client.squareRootMethod(request, response, &context);
+        context.set_deadline(std::chrono::system_clock::now() + std::chrono::milliseconds(100));
+        const calculator::Double response = client.squareRootMethod(request, &context);
+        std::cout << response.getValue() << std::endl;
     }
     catch (const zserio::ServiceException& e)
     {
         std::cout << e.what() << std::endl;
     }
-
-    std::cout << response.getValue() << std::endl;
 }
 
 int main(int argc, char* argv[])

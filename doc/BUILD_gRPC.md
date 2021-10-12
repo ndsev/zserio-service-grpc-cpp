@@ -71,7 +71,7 @@ pushd cmake/build
 INSTALL_PREFIX=/opt/tools/gRPC
 PREFIX_PATH="/opt/tools/protobuf/lib/cmake;/opt/tools/cares/lib/cmake;/opt/tools/abseil/lib/cmake"
 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} -DBUILD_SHARED_LIBS=ON \
-      -DCMAKE_INSTALL_RPATH=${INSTALL_PREFIX}/lib -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON \
+      -DCMAKE_INSTALL_RPATH="${INSTALL_PREFIX}/lib;/opt/tools/protobuf/lib" -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON \
       -DCMAKE_PREFIX_PATH="${PREFIX_PATH}" -DgRPC_INSTALL=ON -DgRPC_BUILD_TESTS=OFF \
       -DgRPC_ABSL_PROVIDER=package -DgRPC_CARES_PROVIDER=package -DgRPC_PROTOBUF_PROVIDER=package \
       -DgRPC_SSL_PROVIDER=package -DgRPC_ZLIB_PROVIDER=package \

@@ -3,9 +3,8 @@ cmake_minimum_required(VERSION 2.8.12.2)
 
 project(ZserioServiceGrpc)
 
-set(REPOSITORY_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/.." CACHE PATH "")
-set(ZSERIO_INCLUDE_DIR "${REPOSITORY_ROOT}/3rdparty/runtime" CACHE PATH "")
 option(BUILD_SHARED_LIBS "Whether to build shared libraries" ON)
+option(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS "Whether to export all symbols on Windows" ON)
 
 if(MSVC)
     add_definitions(-D_WIN32_WINNT=0x600)
@@ -36,7 +35,17 @@ add_custom_command(
         --plugin=protoc-gen-grpc="${GRPC_CPP_PLUGIN_EXECUTABLE}"
         -I "${ZSERIO_SERVICE_PROTO_PATH}" "${ZSERIO_SERVICE_PROTO}"
     DEPENDS "${ZSERIO_SERVICE_PROTO}"
+    COMMENT "Generating Protobuf GRPC API"
 )
+
+# download the latest zserio together with runtime
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../cmake")
+include(zserio_download)
+
+download_zserio("${CMAKE_CURRENT_BINARY_DIR}/download" ZSERIO_JAR ZSERIO_RUNTIME_DIR)
+
+# this is necessary for Windows to create runtime dll in the same directory as executables in the build tree
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
 
 add_library(${PROJECT_NAME}
     ZserioServiceGrpc.cpp
@@ -45,5 +54,5 @@ add_library(${PROJECT_NAME}
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_BINARY_DIR}") # generated sources
-target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC ${ZSERIO_INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC ${ZSERIO_RUNTIME_DIR})
 target_link_libraries(${PROJECT_NAME} gRPC::grpc++)

@@ -5,12 +5,12 @@ This example demonstrates how to use **ZserioServiceGrpc library** to use gRPC s
 ## Prerequisites
 
 1. Prerequisites for [ZserioServiceGrpc](../../README.md#prerequisites),
-2. Zserio C++ runtime library,
-3. Zserio compiler (`zserio.jar`).
 
-> Zserio prerequisites are included in this repo in 3rdparty folder.
+> Note that Zserio prerequisites are automatically downloaded by CMake.
 
 ## Building
+
+Go to the calculator example directory.
 
 ```bash
 mkdir build
@@ -24,12 +24,13 @@ popd
 
 ## Testing
 
+Go to the build directory where executables are located.
+
 ```bash
-cd build
 ./CalculatorServer &
 ./CalculatorClient
 # follow client's instructions
 # ...
-# pres q + ENTER to quit the client
-fg # and pres Ctrl+C to quit the server
+# press q + ENTER to quit the client
+fg # and press Ctrl+C to quit the server
 ```
