@@ -85,6 +85,10 @@ sudo make install
 popd
 ```
 
+> For CMake older than 3.13, try to change `-DgRPC_PROTOBUF_PROVIDER=package` to
+`-DgRPC_PROTOBUF_PROVIDER=module` and remove `-DProtobuf_INCLUDE_DIR`, `-DProtobuf_LIBRARY`,
+`-DProtobuf_PROTOC_LIBRARY` and `-DProtobuf_PROTOC_EXECUTABLE`.
+
 > Since we install gRPC to custom location, we have to use `-DCMAKE_INSTALL_RPATH=${CMAKE_INSTALL_PREFIX}/lib`
 and `-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON` to ensure that binaries find their dependencies.
 

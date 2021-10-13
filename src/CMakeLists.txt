@@ -53,6 +53,7 @@ add_library(${PROJECT_NAME}
     ${ZSERIO_SERVICE_GEN_SOURCES}
 )
 
+set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 11 CXX_STANDARD_REQUIRED YES CXX_EXTENSIONS NO)
 target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_BINARY_DIR}") # generated sources
 target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC ${ZSERIO_RUNTIME_DIR})
 target_link_libraries(${PROJECT_NAME} gRPC::grpc++)
