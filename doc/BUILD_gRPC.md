@@ -101,4 +101,4 @@ repository.
     1. Either temporarily disable (e.g. rename) `FindProtobuf.cmake` during gRPC cmake configuration. The
     `FindProtobuf.cmake` is usually located in `/usr/share/cmake-?.??/Modules`. This causes that CMake use
     CONFIG mode as a fallback and finds Protobuf config in the specified `CMAKE_PREFIX_PATH`.
-    2. Or specify all `Protobuf_` variables manually, like we do above.
+    2. Or patch gRPC cmake/protobuf.cmake by adding NO_CMAKE_SYSTEM_PATH, like we do above.
