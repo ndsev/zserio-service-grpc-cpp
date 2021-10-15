@@ -66,6 +66,8 @@ popd
 
 Build and install gRPC itself:
 ```bash
+# patch CMake configuration to disable usage of system FindProtobuf.cmake
+sed -i -E 's/(find_package\(Protobuf REQUIRED.*)\)/\1 NO_CMAKE_SYSTEM_PATH\)/g' cmake/protobuf.cmake
 mkdir -p cmake/build
 pushd cmake/build
 INSTALL_PREFIX=/opt/tools/gRPC
@@ -75,19 +77,11 @@ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} -DBUIL
       -DCMAKE_PREFIX_PATH="${PREFIX_PATH}" -DgRPC_INSTALL=ON -DgRPC_BUILD_TESTS=OFF \
       -DgRPC_ABSL_PROVIDER=package -DgRPC_CARES_PROVIDER=package -DgRPC_PROTOBUF_PROVIDER=package \
       -DgRPC_SSL_PROVIDER=package -DgRPC_ZLIB_PROVIDER=package \
-      -DProtobuf_INCLUDE_DIR=/opt/tools/protobuf/include \
-      -DProtobuf_LIBRARY=/opt/tools/protobuf/lib/libprotobuf.so \
-      -DProtobuf_PROTOC_LIBRARY=/opt/tools/protobuf/lib/libprotoc.so \
-      -DProtobuf_PROTOC_EXECUTABLE=/opt/tools/protobuf/bin/protoc \
       ../..
 make
 sudo make install
 popd
 ```
-
-> For CMake older than 3.13, try to change `-DgRPC_PROTOBUF_PROVIDER=package` to
-`-DgRPC_PROTOBUF_PROVIDER=module` and remove `-DProtobuf_INCLUDE_DIR`, `-DProtobuf_LIBRARY`,
-`-DProtobuf_PROTOC_LIBRARY` and `-DProtobuf_PROTOC_EXECUTABLE`.
 
 > Since we install gRPC to custom location, we have to use `-DCMAKE_INSTALL_RPATH=${CMAKE_INSTALL_PREFIX}/lib`
 and `-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON` to ensure that binaries find their dependencies.
