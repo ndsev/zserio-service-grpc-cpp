@@ -3,7 +3,9 @@ cmake_minimum_required(VERSION 2.8.12.2)
 
 project(ZserioServiceGrpc)
 
-option(BUILD_SHARED_LIBS "Whether to build shared libraries" ON)
+# please be aware that shared libraries are not recommended by GRPC (actually we observed Segmentation Fault)
+# (https://github.com/grpc/grpc/blob/master/BUILDING.md#windows-a-note-on-building-shared-libs-dlls)
+option(BUILD_SHARED_LIBS "Whether to build shared libraries" OFF)
 option(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS "Whether to export all symbols on Windows" ON)
 
 if(MSVC)
@@ -49,11 +51,11 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
 
 add_library(${PROJECT_NAME}
     ZserioServiceGrpc.cpp
-    ZserioServiceGrpc.cpp
     ${ZSERIO_SERVICE_GEN_SOURCES}
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 11 CXX_STANDARD_REQUIRED YES CXX_EXTENSIONS NO)
 target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_BINARY_DIR}") # generated sources
+add_subdirectory("${ZSERIO_RUNTIME_DIR}" "${CMAKE_CURRENT_BINARY_DIR}/ZserioCppRuntime")
 target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC ${ZSERIO_RUNTIME_DIR})
-target_link_libraries(${PROJECT_NAME} gRPC::grpc++)
+target_link_libraries(${PROJECT_NAME} gRPC::grpc++ ZserioCppRuntime)

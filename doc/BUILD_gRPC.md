@@ -9,8 +9,16 @@ git clone -b v1.27.0 https://github.com/grpc/grpc --recurse-submodules
 ```
 
 > Note that the following instructions are valid for gRPC v1.27.0. Different steps may be needed for other
-versions. It is always a good idea to check gRPC distribution tests for CMake mentioned below to see what
-have to be done.
+versions. It is always a good idea to check gRPC distribution tests for CMake mentioned below to see what have
+to be done.
+
+> Note that these instructions are not valid for Windows. For Windows, use official instructions at
+https://github.com/grpc/grpc/blob/master/BUILDING.md. For gRPC v1.27.0, it is necessary to add
+`find_package(Threads)` and `add_definitions(-D_WIN32_WINNT=0x600)` to `CMakeLists.txt`
+of calculator example.
+
+> :warning: Never use `-DBUILD_SHARED_LIBS=ON` for Windows builds. We observed Segmentation fault
+on client side whenever service call was executed.
 
 > :warning: gRPC release v1.26.0 has a bug which cause a deadlock when trying to build a server or connect
 to a channel. As a workaround it is recommended to use v1.26.x branch or switch to v1.27.0 or newer.
@@ -20,8 +28,8 @@ to a channel. As a workaround it is recommended to use v1.26.x branch or switch 
 The following steps are inspired by gRPC distribution tests for CMake:
 https://github.com/grpc/grpc/blob/master/test/distrib/cpp/run_distrib_test_cmake.sh.
 
-> Note that we use `-DCMAKE_INSTALL_PREFIX=/opt/tools/${TOOL_NAME}` to make it easier to uninstall gRPC and its
-dependencies. Then, we have to use `-DCMAKE_PREFIX_PATH` properly to find the tools by CMake.
+> Note that we use `-DCMAKE_INSTALL_PREFIX=/opt/tools/${TOOL_NAME}` to make it easier to uninstall gRPC
+and its dependencies. Then, we have to use `-DCMAKE_PREFIX_PATH` properly to find the tools by CMake.
 
 > Note that you should use `-DBUILD_SHARED_LIBS=ON` only if you need to build shared libraries.
 
@@ -90,11 +98,11 @@ and `-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON` to ensure that binaries find their 
 
 #### FindProtobuf.cmake
 
-Current gRPC CMake configuration uses `find_package(protobuf ...)`, but it uses MODULE mode by default. Then it
-expects legacy variable names like `Protobuf_INCLUDE_DIR`, `Protobuf_LIBRARY`, `Protobuf_PROTOC_LIBRARY` and
-`Protobuf_PROTOC_EXECUTABLE`. Unfortunately older CMake (tested with 3.10) comes with its own
-`FindProtobuf.cmake` which is incompatible with the protobuf library packed as a third_party submodule in gRPC
-repository.
+Current gRPC CMake configuration uses `find_package(protobuf ...)`, but it uses MODULE mode by default.
+Then it expects legacy variable names like `Protobuf_INCLUDE_DIR`, `Protobuf_LIBRARY`,
+`Protobuf_PROTOC_LIBRARY` and `Protobuf_PROTOC_EXECUTABLE`. Unfortunately older CMake (tested with 3.10)
+comes with its own `FindProtobuf.cmake` which is incompatible with the protobuf library packed as a
+third_party submodule in gRPC repository.
 
 1. With CMake >= 3.15, just add `-DCMAKE_FIND_PACKAGE_PREFER_CONFIG=TRUE` to the gRPC cmake configuration.
 2. With CMake < 3.15:

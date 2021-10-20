@@ -68,7 +68,4 @@ target_link_libraries(CalculatorClient ZserioServiceGrpc)
 
 # add ZserioCppRuntime library
 set(ZSERIO_INCLUDE_DIR "${DOWNLOAD_DIR}/runtime_libs/cpp")
-add_subdirectory("${ZSERIO_INCLUDE_DIR}" "${CMAKE_CURRENT_BINARY_DIR}/ZserioCppRuntime")
 target_include_directories(CalculatorGen PRIVATE "${ZSERIO_INCLUDE_DIR}")
-target_link_libraries(CalculatorServer ZserioCppRuntime)
-target_link_libraries(CalculatorClient ZserioCppRuntime)

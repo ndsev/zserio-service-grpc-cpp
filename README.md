@@ -4,13 +4,14 @@ Sample implementation of Zserio Service gRPC backend in **C++**.
 
 ## Prerequisites
 
-Install gRPC and protobuf according to the official instructions: https://grpc.io/docs/quickstart/cpp/.
+Install gRPC and protobuf according to the official instructions:
+https://github.com/grpc/grpc/blob/master/BUILDING.md.
 
 > Note that this sample use CMake and therefore it is necessary to install gRPC using CMake, otherwise
 CMake's `find_package(gRPC)` will not be available.
 
-> Since gRPC official instructions are sometimes inaccurate, you can check our
-[doc/BUILD_gRPC.md](doc/BUILD_gRPC.md).
+> Since gRPC official instructions do not support properly older gRPC version using older CMake < 3.13,
+you can check our [doc/BUILD_gRPC.md](doc/BUILD_gRPC.md).
 
 > Note that Zserio prerequisites are automatically downloaded by CMake.
 
@@ -20,9 +21,11 @@ CMake's `find_package(gRPC)` will not be available.
 [doc/BUILD_gRPC.md](doc/BUILD_gRPC.md) and therefore it uses `-DCMAKE_PREFIX_PATH` to set correct path to gRPC
 and its dependencies.
 
-Make sure that protobuf compiler and gRPC plugin are in `PATH`:
+Make sure that `PREFIX_PATH` is set correctly to gRPC installation. For example,
+if [doc/BUILD_gRPC.md](doc/BUILD_gRPC.md) has been used, set the following:
 ```bash
-export PATH=/opt/tools/protobuf/bin:/opt/tools/gRPC/bin:$PATH
+PREFIX_PATH="/opt/tools/gRPC/lib/cmake;/opt/tools/protobuf/lib/cmake"
+PREFIX_PATH+=";/opt/tools/cares/lib/cmake;/opt/tools/abseil/lib/cmake"
 ```
 
 Go to the ZserioServiceGrpc root directory.
@@ -31,12 +34,13 @@ Build ZserioServiceGrpc library:
 ```bash
 mkdir build
 pushd build
-PREFIX_PATH="/opt/tools/gRPC/lib/cmake;/opt/tools/protobuf/lib/cmake"
-PREFIX_PATH+=";/opt/tools/cares/lib/cmake;/opt/tools/abseil/lib/cmake"
 cmake -DCMAKE_PREFIX_PATH="${PREFIX_PATH}" ../src
 cmake --build .
 popd
 ```
+
+> Note that for MSVC compiler, you might need to specify configuration by `cmake --build . --config Release`
+or  `cmake --build . --config Debug`.
 
 ## Usage
 

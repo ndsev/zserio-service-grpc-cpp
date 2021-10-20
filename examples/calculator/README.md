@@ -10,17 +10,25 @@ This example demonstrates how to use **ZserioServiceGrpc library** to use gRPC s
 
 ## Building
 
+Make sure that `PREFIX_PATH` is set correctly to gRPC installation. For example,
+if [doc/BUILD_gRPC.md](doc/BUILD_gRPC.md) has been used, set the following:
+```bash
+PREFIX_PATH="/opt/tools/gRPC/lib/cmake;/opt/tools/protobuf/lib/cmake"
+PREFIX_PATH+=";/opt/tools/cares/lib/cmake;/opt/tools/abseil/lib/cmake"
+```
+
 Go to the calculator example directory.
 
 ```bash
 mkdir build
 pushd build
-PREFIX_PATH="/opt/tools/gRPC/lib/cmake;/opt/tools/protobuf/lib/cmake"
-PREFIX_PATH+=";/opt/tools/cares/lib/cmake;/opt/tools/abseil/lib/cmake"
 cmake -DCMAKE_PREFIX_PATH="${PREFIX_PATH}" ..
 cmake --build .
 popd
 ```
+
+> Note that for MSVC compiler, you might need to specify configuration by `cmake --build . --config Release`
+or  `cmake --build . --config Debug`.
 
 ## Testing
 
