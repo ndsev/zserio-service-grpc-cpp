@@ -17,10 +17,6 @@ you can check our [doc/BUILD_gRPC.md](doc/BUILD_gRPC.md).
 
 ## Building
 
-> Note that the following instructions suppose that gRPC was installed according to
-[doc/BUILD_gRPC.md](doc/BUILD_gRPC.md) and therefore it uses `-DCMAKE_PREFIX_PATH` to set correct path to gRPC
-and its dependencies.
-
 Make sure that `PREFIX_PATH` is set correctly to gRPC installation. For example,
 if [doc/BUILD_gRPC.md](doc/BUILD_gRPC.md) has been used, set the following:
 ```bash
