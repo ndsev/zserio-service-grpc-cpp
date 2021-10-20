@@ -13,9 +13,10 @@ versions. It is always a good idea to check gRPC distribution tests for CMake me
 to be done.
 
 > Note that these instructions are not valid for Windows. For Windows, use official instructions at
-https://github.com/grpc/grpc/blob/master/BUILDING.md. For gRPC v1.27.0, it is necessary to add
-`find_package(Threads)` and `add_definitions(-D_WIN32_WINNT=0x600)` to `CMakeLists.txt`
-of calculator example.
+https://github.com/grpc/grpc/blob/master/BUILDING.md. Together with `-DCMAKE_INSTALL_PREFIX`,
+use `-DgRPC_INSTALL=ON -DgRPC_BUILD_TESTS=OFF` CMake options. During building, use `--target install`
+CMake option. For gRPC v1.27.0, it is necessary to add `find_package(Threads)` and
+`add_definitions(-D_WIN32_WINNT=0x600)` to `CMakeLists.txt` of calculator example.
 
 > :warning: Never use `-DBUILD_SHARED_LIBS=ON` for Windows builds. We observed Segmentation fault
 on client side whenever service call was executed.
