@@ -36,7 +36,7 @@ namespace zserio_service_grpc
     };
 
     /** Implementation of gRPC ZserioService client as Zserio generic service interface. */
-    class GrpcClient : public zserio::IService
+    class GrpcClient : public zserio::IServiceClient
     {
     public:
         /**
@@ -47,14 +47,14 @@ namespace zserio_service_grpc
         explicit GrpcClient(const std::shared_ptr<grpc::Channel>& channel);
 
         /**
-         * Implementation of IService::callMethod.
+         * Implementation of IServiceClient::callMethod.
          */
-        void callMethod(zserio::StringView methodName, zserio::Span<const uint8_t> requestData,
-                zserio::IBlobBuffer& responseData, void* context) override;
+        std::vector<uint8_t> callMethod(zserio::StringView methodName, const zserio::RequestData& requestData,
+                void* context) override;
 
     private:
-        void callMethodWithContext(zserio::StringView methodName, zserio::Span<const uint8_t> requestData,
-                zserio::IBlobBuffer& responseData, grpc::ClientContext* context);
+        std::vector<uint8_t> callMethodWithContext(zserio::StringView methodName, const zserio::RequestData& requestData,
+                grpc::ClientContext* context);
 
         std::unique_ptr<zserio_service_grpc::ZserioService::Stub> m_stub;
     };

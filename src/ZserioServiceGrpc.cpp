@@ -14,12 +14,26 @@ namespace zserio_service_grpc
         if (serverContext->IsCancelled())
             return grpc::Status(grpc::StatusCode::CANCELLED, "Client cancelled, abandoning.");
 
-        const std::vector<uint8_t> requestData(request->requestdata().begin(), request->requestdata().end());
-        zserio::BlobBuffer<> responseData;
+        zserio::Span<const uint8_t> requestData(
+                reinterpret_cast<const uint8_t*>(request->requestdata().data()), request->requestdata().size());
 
-        m_service.callMethod(request->methodname(), requestData, responseData, serverContext);
+        ::zserio::IResponseDataPtr responseData = m_service.callMethod(request->methodname(), requestData, serverContext);
+        auto reflectable = responseData->getReflectable();
+        if (reflectable)
+        {
+            // -withTypeInfoCode
+            zserio::BitBuffer bitBuffer(reflectable->bitSizeOf());
+            zserio::BitStreamWriter writer(bitBuffer);
+            reflectable->write(writer);
+            response->set_responsedata({
+                    bitBuffer.getBuffer(), bitBuffer.getBuffer() + bitBuffer.getByteSize()});
+        }
+        else
+        {
+            // -withoutTypeInfoCode
+            response->set_responsedata({responseData->getData().begin(), responseData->getData().end()});
+        }
 
-        response->set_responsedata({responseData.data().begin(), responseData.data().end()});
         return grpc::Status::OK;
     }
 
@@ -28,28 +42,41 @@ namespace zserio_service_grpc
     {
     }
 
-    void GrpcClient::callMethod(zserio::StringView methodName, zserio::Span<const uint8_t> requestData,
-            zserio::IBlobBuffer& responseData, void* context)
+    std::vector<uint8_t> GrpcClient::callMethod(zserio::StringView methodName,
+            const zserio::RequestData& requestData, void* context)
     {
         if (context == nullptr)
         {
             grpc::ClientContext defaultContext;
-            callMethodWithContext(methodName, requestData, responseData, &defaultContext);
+            return callMethodWithContext(methodName, requestData, &defaultContext);
         }
         else
         {
-            callMethodWithContext(methodName, requestData, responseData,
-                    static_cast<grpc::ClientContext*>(context));
+            return callMethodWithContext(methodName, requestData, static_cast<grpc::ClientContext*>(context));
         }
     }
 
-    void GrpcClient::callMethodWithContext(zserio::StringView methodName,
-            zserio::Span<const uint8_t> requestData, zserio::IBlobBuffer& responseData,
-            grpc::ClientContext* context)
+    std::vector<uint8_t> GrpcClient::callMethodWithContext(zserio::StringView methodName,
+            const zserio::RequestData& requestData, grpc::ClientContext* context)
     {
         Request request;
         request.set_methodname(methodName.data(), methodName.size());
-        request.set_requestdata({requestData.begin(), requestData.end()});
+
+        auto reflectable = requestData.getReflectable();
+        if (reflectable)
+        {
+            // -withTypeInfoCode
+            zserio::BitBuffer bitBuffer(reflectable->bitSizeOf());
+            zserio::BitStreamWriter writer(bitBuffer);
+            reflectable->write(writer);
+            request.set_requestdata({
+                    bitBuffer.getBuffer(), bitBuffer.getBuffer() + bitBuffer.getByteSize()});
+        }
+        else
+        {
+            // -withoutTypeInfoCode
+            request.set_requestdata({requestData.getData().begin(), requestData.getData().end()});
+        }
 
         Response response;
         grpc::Status status = m_stub->callMethod(context, request, &response);
@@ -57,8 +84,9 @@ namespace zserio_service_grpc
         if (status.ok())
         {
             const std::string& grpcResponseData = response.responsedata();
-            responseData.resize(grpcResponseData.length());
-            std::copy(grpcResponseData.begin(), grpcResponseData.end(), responseData.data().begin());
+            std::vector<uint8_t> responseData(grpcResponseData.length());
+            std::copy(grpcResponseData.begin(), grpcResponseData.end(), responseData.begin());
+            return responseData;
         }
         else
         {
