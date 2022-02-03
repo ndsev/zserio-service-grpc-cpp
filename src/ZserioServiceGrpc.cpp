@@ -17,22 +17,9 @@ namespace zserio_service_grpc
         zserio::Span<const uint8_t> requestData(
                 reinterpret_cast<const uint8_t*>(request->requestdata().data()), request->requestdata().size());
 
-        ::zserio::IResponseDataPtr responseData = m_service.callMethod(request->methodname(), requestData, serverContext);
-        auto reflectable = responseData->getReflectable();
-        if (reflectable)
-        {
-            // -withTypeInfoCode
-            zserio::BitBuffer bitBuffer(reflectable->bitSizeOf());
-            zserio::BitStreamWriter writer(bitBuffer);
-            reflectable->write(writer);
-            response->set_responsedata({
-                    bitBuffer.getBuffer(), bitBuffer.getBuffer() + bitBuffer.getByteSize()});
-        }
-        else
-        {
-            // -withoutTypeInfoCode
-            response->set_responsedata({responseData->getData().begin(), responseData->getData().end()});
-        }
+        ::zserio::IResponseDataPtr responseData = m_service.callMethod(
+                request->methodname(), requestData, serverContext);
+        response->set_responsedata({responseData->getData().begin(), responseData->getData().end()});
 
         return grpc::Status::OK;
     }
@@ -61,22 +48,7 @@ namespace zserio_service_grpc
     {
         Request request;
         request.set_methodname(methodName.data(), methodName.size());
-
-        auto reflectable = requestData.getReflectable();
-        if (reflectable)
-        {
-            // -withTypeInfoCode
-            zserio::BitBuffer bitBuffer(reflectable->bitSizeOf());
-            zserio::BitStreamWriter writer(bitBuffer);
-            reflectable->write(writer);
-            request.set_requestdata({
-                    bitBuffer.getBuffer(), bitBuffer.getBuffer() + bitBuffer.getByteSize()});
-        }
-        else
-        {
-            // -withoutTypeInfoCode
-            request.set_requestdata({requestData.getData().begin(), requestData.getData().end()});
-        }
+        request.set_requestdata({requestData.getData().begin(), requestData.getData().end()});
 
         Response response;
         grpc::Status status = m_stub->callMethod(context, request, &response);
