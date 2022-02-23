@@ -49,12 +49,12 @@ namespace zserio_service_grpc
         /**
          * Implementation of IServiceClient::callMethod.
          */
-        std::vector<uint8_t> callMethod(zserio::StringView methodName, const zserio::RequestData& requestData,
+        std::vector<uint8_t> callMethod(zserio::StringView methodName, const zserio::IServiceData& requestData,
                 void* context) override;
 
     private:
-        std::vector<uint8_t> callMethodWithContext(zserio::StringView methodName, const zserio::RequestData& requestData,
-                grpc::ClientContext* context);
+        std::vector<uint8_t> callMethodWithContext(zserio::StringView methodName,
+                const zserio::IServiceData& requestData, grpc::ClientContext* context);
 
         std::unique_ptr<zserio_service_grpc::ZserioService::Stub> m_stub;
     };

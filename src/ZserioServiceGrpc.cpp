@@ -17,7 +17,7 @@ namespace zserio_service_grpc
         zserio::Span<const uint8_t> requestData(
                 reinterpret_cast<const uint8_t*>(request->requestdata().data()), request->requestdata().size());
 
-        ::zserio::IResponseDataPtr responseData = m_service.callMethod(
+        ::zserio::IServiceDataPtr responseData = m_service.callMethod(
                 request->methodname(), requestData, serverContext);
         response->set_responsedata({responseData->getData().begin(), responseData->getData().end()});
 
@@ -30,7 +30,7 @@ namespace zserio_service_grpc
     }
 
     std::vector<uint8_t> GrpcClient::callMethod(zserio::StringView methodName,
-            const zserio::RequestData& requestData, void* context)
+            const zserio::IServiceData& requestData, void* context)
     {
         if (context == nullptr)
         {
@@ -44,7 +44,7 @@ namespace zserio_service_grpc
     }
 
     std::vector<uint8_t> GrpcClient::callMethodWithContext(zserio::StringView methodName,
-            const zserio::RequestData& requestData, grpc::ClientContext* context)
+            const zserio::IServiceData& requestData, grpc::ClientContext* context)
     {
         Request request;
         request.set_methodname(methodName.data(), methodName.size());
