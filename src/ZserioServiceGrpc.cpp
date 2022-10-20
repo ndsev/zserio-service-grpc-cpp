@@ -62,7 +62,7 @@ namespace zserio_service_grpc
         }
         else
         {
-            throw ::zserio::ServiceException("gRPC call failed: " + status.error_message());
+            throw ::zserio::ServiceException("gRPC call failed: ") << status.error_message();
         }
     }
 } // namespace zserio_service_grpc
