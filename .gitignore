@@ -3,6 +3,3 @@ build
 
 # gRPC sources
 grpc
-
-# Eclipse project files
-.project
