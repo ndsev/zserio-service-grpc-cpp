@@ -1,5 +1,5 @@
 # Calculator Example using ZserioServiceGrpc library
-cmake_minimum_required(VERSION 3.1.0)
+cmake_minimum_required(VERSION 3.5)
 
 project(Calculator)
 
@@ -69,3 +69,6 @@ target_link_libraries(CalculatorClient ZserioServiceGrpc)
 # add ZserioCppRuntime library
 set(ZSERIO_INCLUDE_DIR "${DOWNLOAD_DIR}/runtime_libs/cpp")
 target_include_directories(CalculatorGen PRIVATE "${ZSERIO_INCLUDE_DIR}")
+
+install(TARGETS CalculatorClient DESTINATION ".")
+install(TARGETS CalculatorServer DESTINATION ".")

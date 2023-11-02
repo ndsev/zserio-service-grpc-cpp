@@ -1,5 +1,5 @@
 # Sample of Zserio Service gRPC implementation in C++
-cmake_minimum_required(VERSION 3.1.0)
+cmake_minimum_required(VERSION 3.5)
 
 project(ZserioServiceGrpc)
 
@@ -59,3 +59,5 @@ target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_BINARY_DIR}")
 add_subdirectory("${ZSERIO_RUNTIME_DIR}" "${CMAKE_CURRENT_BINARY_DIR}/ZserioCppRuntime")
 target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC ${ZSERIO_RUNTIME_DIR})
 target_link_libraries(${PROJECT_NAME} gRPC::grpc++ ZserioCppRuntime)
+
+install(TARGETS ${PROJECT_NAME} DESTINATION ".")
