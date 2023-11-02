@@ -1,5 +1,8 @@
 # generated build files
-build
+/build
 
 # gRPC sources
-grpc
+/grpc
+
+# compiled binaries
+/distr
