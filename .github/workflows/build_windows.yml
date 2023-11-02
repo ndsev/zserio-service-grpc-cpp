@@ -1,0 +1,57 @@
+name: Windows
+
+on:
+  push:
+    branches: [ master, '*-ci' ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 0'
+
+jobs:
+  build_windows:
+    runs-on: ${{matrix.os}}
+    strategy:
+      matrix:
+        os: ["windows-latest"]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        submodules: recursive
+
+    - name: Build Grpc library
+      run: |
+        git clone -b v1.43.0 https://github.com/grpc/grpc build/grpc
+        cd build/grpc
+        git submodule update --init
+        mkdir -p cmake/build
+        cd cmake/build
+        cmake ../.. -DgRPC_INSTALL=ON
+        cmake --build . --target install --config Release
+      shell: bash
+
+    - name: Build Zserio C++ Service Grpc
+      run: |
+        cd build
+        cmake ../examples/calculator -DCMAKE_INSTALL_PREFIX=../distr -DCMAKE_GENERATOR_PLATFORM=x64 \
+              -DCMAKE_PREFIX_PATH="/c/Program Files (x86)/grpc/cmake:/c/Program Files (x86)/grpc/lib/cmake"
+        cmake --build . --target install --config Release
+      shell: bash
+
+    - name: Test Zserio C++ Service Grpc
+      run: |
+        cd build/Release
+        ./CalculatorServer &
+        sleep 10
+        echo -e "p\\n100\\nq" | ./CalculatorClient | grep "10000"
+        echo -e "s\\n100\\nq" | ./CalculatorClient | grep "10"
+        kill $(jobs -p)
+      shell: bash
+
+    - name: Archive Zserio C++ Service Grpc binaries
+      uses: actions/upload-artifact@v3
+      with:
+        name: zserio-service-grpc-cpp-${{matrix.os}}
+        path: distr/*

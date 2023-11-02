@@ -1,5 +1,13 @@
 # Zserio Service gRPC backend
 
+[![](https://github.com/ndsev/zserio-service-grpc-cpp/actions/workflows/build_linux.yml/badge.svg)](https://github.com/ndsev/zserio-service-grpc-cpp/actions/workflows/build_linux.yml)
+[![](https://github.com/ndsev/zserio-service-grpc-cpp/actions/workflows/build_windows.yml/badge.svg)](https://github.com/ndsev/zserio-service-grpc-cpp/actions/workflows/build_windows.yml)
+[![](https://img.shields.io/github/watchers/ndsev/zserio-service-grpc-cpp.svg)](https://GitHub.com/ndsev/zserio-service-grpc-cpp/watchers)
+[![](https://img.shields.io/github/forks/ndsev/zserio-service-grpc-cpp.svg)](https://GitHub.com/ndsev/zserio-service-grpc-cpp/network/members)
+[![](https://img.shields.io/github/stars/ndsev/zserio-service-grpc-cpp.svg?color=yellow)](https://GitHub.com/ndsev/zserio-service-grpc-cpp/stargazers)
+
+--------
+
 Sample implementation of Zserio Service gRPC backend in **C++**.
 
 ## Prerequisites
