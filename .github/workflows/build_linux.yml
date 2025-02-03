@@ -43,7 +43,7 @@ jobs:
         kill $(jobs -p)
 
     - name: Archive Zserio C++ Service Grpc binaries
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: zserio-service-grpc-cpp-${{matrix.os}}
         path: distr/*
